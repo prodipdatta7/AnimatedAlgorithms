@@ -9,8 +9,8 @@ Welcome to the **Segment Tree Interactive Studio** tutorial and build log! This 
 2. [Phase 1: Project Setup & Package Configuration](#2-phase-1-project-setup--package-configuration)
 3. [Phase 2: Core Data Types & Algorithmic Engine](#3-phase-2-core-data-types--algorithmic-engine)
 4. [Phase 3: Svelte 5 Runes & Playback Clock](#4-phase-3-svelte-5-runes--playback-clock)
-5. [Phase 4: UI Design System & Interactive Modules](#5-phase-4-ui-design-system--interactive-modules) *(Upcoming)*
-6. [Phase 5: Automated Testing & End-to-End Verification](#6-phase-5-automated-testing--end-to-end-verification) *(Upcoming)*
+5. [Phase 4: UI Design System & Interactive Modules](#5-phase-4-ui-design-system--interactive-modules)
+6. [Phase 5: Automated Testing & End-to-End Verification](#6-phase-5-automated-testing--end-to-end-verification)
 
 ---
 
@@ -85,15 +85,33 @@ Per AGENTS.md §4.6, Svelte's built-in enter/exit transitions cannot seek to arb
 - **`currentStepIndex` ($derived):** Single source of truth derived as $\min(\text{totalSteps}-1, \lfloor\text{currentTime}/\text{stepDurationMs}\rfloor)$.
 - **Transport Actions:** `play()`, `pause()`, `seek(ms)`, `seekToStep(stepIdx)`, `setRate(rate)`, `reset()`.
 
-### 4.2 Scenario Builder Store (`src/lib/stores/builder.svelte.ts`)
-- **`options` ($state):** Active scenario configuration.
-- **`steps` ($derived):** Automatically recomputes `AlgorithmStep[]` via `generateSteps(options)`.
-- **`layout` ($derived):** Automatically recomputes `TreeNodePosition[]` via `calculateTreeLayout(options.array)`.
-- **`validationErrors` ($derived.by):** Inline field-level input validation preventing invalid executions.
+---
 
-### 4.3 Vault Store (`src/lib/stores/vault.svelte.ts`)
-Generates production-ready C++20 Segment Tree templates (with Fast I/O, Lazy, and 0-based/1-based options) and manages interactive micro-quiz states.
+## 5. Phase 4: UI Design System & Interactive Modules
+
+Phase 4 implemented all 4 product modules and assembled them into a high-density, scannable cyberpunk dashboard.
 
 ---
 
-*(This document is updated at the conclusion of each project phase).*
+## 6. Phase 5: Automated Testing & End-to-End Verification
+
+Phase 5 established the automated testing suite and validated end-to-end user workflows.
+
+### 6.1 Unit Testing with Vitest (`src/lib/**/*.test.ts`)
+- **17 Unit Tests Across 6 Test Files:**
+  - `step-generator.test.ts` (5 tests): Lower bound $N=2$, upper bound $N=16$, lazy tag cascading across $\ge 3$ levels, partial-to-full overlap resolution, and contract shape compliance.
+  - `tree-layout.test.ts` (2 tests): Reingold-Tilford node coordinate engine verification.
+  - `url-state.test.ts` (2 tests): Base64 URL serialization & malformed fallback.
+  - `playback.test.ts` (4 tests): Seekable transport clock, rate limits ($0.25\times$ to $2.0\times$), step calculations, and reset.
+  - `builder.test.ts` (2 tests): Option store updates & preset application.
+  - `vault.test.ts` (2 tests): C++20 template generation & quiz state.
+
+### 6.2 End-to-End Testing with Playwright (`e2e/*.spec.ts`)
+- **8 Playwright E2E Tests (100% Passing):**
+  - `playback-deck.spec.ts` (4 tests): Step Forward line highlights, Play/Pause execution, timeline scrubbing, and boundary jumps.
+  - `visual-state-redundancy.spec.ts` (1 test): Redundant non-color accessibility signals (dashed stroke patterns & glyph badges).
+  - `url-state-sharing.spec.ts` (2 tests): Base64 URL state restoration & malformed link inline notice fallback.
+  - `quiz-pause.spec.ts` (1 test): Micro-quiz prediction pause modal halting playback until answered.
+
+### 6.3 Type & Template Diagnostics (`npm run check`)
+- Ran `svelte-check --tsconfig ./tsconfig.json` resulting in **0 errors and 0 warnings**.
