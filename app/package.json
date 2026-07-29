@@ -1,0 +1,32 @@
+{
+  "name": "segment-tree-interactive-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4300",
+    "build": "svelte-check && vite build",
+    "preview": "vite preview --port 4300",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.0.0",
+    "d3-hierarchy": "^3.1.2",
+    "shiki": "^3.2.0",
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@testing-library/svelte": "^5.2.7",
+    "@types/d3-hierarchy": "^3.1.7",
+    "svelte-check": "^4.1.4",
+    "tailwindcss": "^4.0.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5"
+  }
+}
