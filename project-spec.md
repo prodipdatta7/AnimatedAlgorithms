@@ -1,6 +1,6 @@
 # Project Specification — Segment Tree Interactive Studio
 
-> **Version:** 1.0.0  
+> **Version:** 1.1.0  
 > **Framework:** Svelte 5 (Runes) + Vite  
 > **Target Audience:** Competitive Programmers, Computer Science Students, AI Agents  
 
@@ -23,7 +23,7 @@ The **Segment Tree Interactive Studio** is a pure client-side visual learning pl
 - **Validation:** Pre-flight inline input validation preventing invalid execution while keeping the Run button accessible.
 
 ### Module B: Visual Simulation & Motion Canvas
-- **Tree Layout:** Dynamic 2D tree graph calculated via `d3-hierarchy` Reingold–Tilford engine.
+- **Tree Layout:** Dynamic 2D tree graph calculated via `d3-hierarchy` Reingold–Tilford engine (`src/lib/tree-layout.ts`).
 - **Visual Encoding:** Color + redundant visual signals (stroke dashes, badges) for accessibility:
   - `visiting`: `#f59e0b` (Yellow ring)
   - `fullOverlap`: `#10b981` (Emerald green fill)
@@ -40,7 +40,7 @@ The **Segment Tree Interactive Studio** is a pure client-side visual learning pl
 ### Module D: CP Vault & Learning Utilities
 - **Micro-Quizzes:** Interactive prediction pauses requiring user prediction before exploring tree sub-branches.
 - **Template Vault:** Custom C++20 boilerplate code generator with Fast I/O and Lazy options.
-- **URL Sharing:** Base64-encoded query parameters enabling scenario bookmarking and sharing.
+- **URL Sharing:** Base64-encoded query parameters enabling scenario bookmarking and sharing (`src/lib/url-state.ts`).
 
 ---
 
@@ -66,6 +66,9 @@ interface AlgorithmStep {
 
 ---
 
-## 4. Verification & Quality Assurance
-- **Unit Testing:** Vitest coverage for boundary $N=2, 16$, multi-level lazy pushes, and partial-to-full overlap transitions.
-- **E2E Testing:** Playwright automated browser test suite covering playback scrubbing, accessibility state markers, URL sharing, and quiz pauses.
+## 4. Implementation Status (Phase 2 Complete)
+- `src/lib/algorithm-step.types.ts`: Universal TypeScript contracts & interfaces.
+- `src/lib/step-generator.ts`: Pure algorithmic dry-run snapshot generator.
+- `src/lib/tree-layout.ts`: `d3-hierarchy` Reingold-Tilford tree graph math.
+- `src/lib/url-state.ts`: Base64 state serializer/deserializer.
+- `src/lib/*.test.ts`: 100% passing Vitest unit test suite (9 tests total).
