@@ -8,7 +8,7 @@ Welcome to the **Segment Tree Interactive Studio** tutorial and build log! This 
 1. [Overview & Architectural Vision](#1-overview--architectural-vision)
 2. [Phase 1: Project Setup & Package Configuration](#2-phase-1-project-setup--package-configuration)
 3. [Phase 2: Core Data Types & Algorithmic Engine](#3-phase-2-core-data-types--algorithmic-engine)
-4. [Phase 3: Svelte 5 Runes & Playback Clock](#4-phase-3-svelte-5-runes--playback-clock) *(Upcoming)*
+4. [Phase 3: Svelte 5 Runes & Playback Clock](#4-phase-3-svelte-5-runes--playback-clock)
 5. [Phase 4: UI Design System & Interactive Modules](#5-phase-4-ui-design-system--interactive-modules) *(Upcoming)*
 6. [Phase 5: Automated Testing & End-to-End Verification](#6-phase-5-automated-testing--end-to-end-verification) *(Upcoming)*
 
@@ -52,7 +52,7 @@ d:\Local-Projects\AnimatedAlgorithms\
 Phase 2 constructed the core TypeScript domain models, mathematical tree layout calculator, non-destructive step generation engine, and URL state encoding.
 
 ### 3.1 Data Contracts (`src/lib/algorithm-step.types.ts`)
-The `AlgorithmStep` interface serves as the universal contract across all UI modules (Canvas, Code Synchronizer, Micro-Quiz, Playback Deck):
+The `AlgorithmStep` interface serves as the universal contract across all UI modules:
 
 ```typescript
 export interface AlgorithmStep {
@@ -70,23 +70,29 @@ export interface AlgorithmStep {
 ```
 
 ### 3.2 Non-Destructive Step Generation (`src/lib/step-generator.ts`)
-Instead of computing tree state live during visual playback, `generateSteps(options)` pre-computes an array snapshot of `AlgorithmStep[]` on simulation start:
-- **Operations Supported:** Range Query, Point Update, Lazy Range Update.
-- **Aggregates Supported:** Sum ($\sum$), Min ($\min$), Max ($\max$).
-- **Lazy Propagation:** When visiting a node with a pending lazy tag, `pushLazy(...)` cascades the tag to left (`2*node+1`) and right (`2*node+2`) children while recording explicit animation steps.
+`generateSteps(options)` pre-computes an array snapshot of `AlgorithmStep[]` on simulation start for instant forward/backward scrubbing.
 
-### 3.3 Reingold–Tilford Tree Layout (`src/lib/tree-layout.ts`)
-Uses `d3-hierarchy` (`hierarchy` + `tree`) to convert a 1D Segment Tree array into 2D Cartesian coordinates $(x, y)$ mapped onto SVG viewBox boundaries. It is a pure, side-effect-free data transform.
+---
 
-### 3.4 Base64 URL State Encoding (`src/lib/url-state.ts`)
-`encodeScenarioToUrl` and `decodeScenarioFromUrl` serialize scenario parameters into a Base64 URL query parameter `?s=<base64>`. Malformed inputs trigger safe fallback to `DEFAULT_SCENARIO` without throwing unhandled exceptions.
+## 4. Phase 3: Svelte 5 Runes & Playback Clock
 
-### 3.5 Automated Unit Testing (`src/lib/step-generator.test.ts`)
-Verified with **Vitest**:
-- Boundary array sizes $N = 2$ and $N = 16$.
-- Lazy tag push cascading across $\ge 3$ tree levels.
-- Partial overlap to child full overlap recursive traversal order.
-- Full `AlgorithmStep` interface key compliance.
+Phase 3 established reactive stores powered by Svelte 5 Runes (`$state`, `$derived`, `$derived.by`).
+
+### 4.1 Custom Transport Clock (`src/lib/stores/playback.svelte.ts`)
+Per AGENTS.md §4.6, Svelte's built-in enter/exit transitions cannot seek to arbitrary steps or adjust speed live. We built `createPlaybackClock(getTotalSteps, stepDurationMs)`:
+- **`currentTime` ($state):** Seekable timestamp in milliseconds.
+- **`playbackRate` ($state):** Variable speed rate ($0.25\times$ to $2.0\times$).
+- **`currentStepIndex` ($derived):** Single source of truth derived as $\min(\text{totalSteps}-1, \lfloor\text{currentTime}/\text{stepDurationMs}\rfloor)$.
+- **Transport Actions:** `play()`, `pause()`, `seek(ms)`, `seekToStep(stepIdx)`, `setRate(rate)`, `reset()`.
+
+### 4.2 Scenario Builder Store (`src/lib/stores/builder.svelte.ts`)
+- **`options` ($state):** Active scenario configuration.
+- **`steps` ($derived):** Automatically recomputes `AlgorithmStep[]` via `generateSteps(options)`.
+- **`layout` ($derived):** Automatically recomputes `TreeNodePosition[]` via `calculateTreeLayout(options.array)`.
+- **`validationErrors` ($derived.by):** Inline field-level input validation preventing invalid executions.
+
+### 4.3 Vault Store (`src/lib/stores/vault.svelte.ts`)
+Generates production-ready C++20 Segment Tree templates (with Fast I/O, Lazy, and 0-based/1-based options) and manages interactive micro-quiz states.
 
 ---
 
